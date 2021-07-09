@@ -5,13 +5,14 @@ using System.Linq;
 
 namespace lab04.Models
 {
-    public partial class BigschoolContext : DbContext
+    public partial class BigSchoolDBContext : DbContext
     {
-        public BigschoolContext()
-            : base("name=BigschoolContext1")
+        public BigSchoolDBContext()
+            : base("name=BigSchoolDBContext")
         {
         }
 
+        public virtual DbSet<Attendee> Attendee { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Course> Course { get; set; }
 
@@ -21,6 +22,11 @@ namespace lab04.Models
                 .HasMany(e => e.Course)
                 .WithRequired(e => e.Category)
                 .HasForeignKey(e => e.CatogoryID)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Course>()
+                .HasMany(e => e.Attendee)
+                .WithRequired(e => e.Course)
                 .WillCascadeOnDelete(false);
         }
     }

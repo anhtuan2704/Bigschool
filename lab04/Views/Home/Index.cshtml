@@ -1,13 +1,52 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Home Page";
 }
+<link href="~/Content/Site.css" rel="stylesheet" />
+<a href="@Url.Action("Create","course")">Create</a>
 <div class="row">
-    <ul>
-        @foreach(var course in Model)
-            {
-                <li>
-                    @course.Datetime.ToString("dd/MM/yyyy HH:mm") - @course.Name - @course.Category.Name
-                </li>
-            }
+    <ul class="course">
+        @foreach (var course in Model)
+        {
+            <li>
+                <div class="date">
+                    <div class="month">
+                        @course.Datetime.ToString("MM")
+                    </div>
+                    <div class="day">
+                        @course.Datetime.ToString("dd")
+                    </div>
+                </div>
+                <div class="details">
+                    <span class="lecture">
+                        @course.Name
+                    </span>
+                    <span class="category">
+                        @course.Category.Name
+                    </span>
+                    <button data-course-id="@course.id" class="btn btn-default btn-sm js-tongle-attendance">Going?</button>
+                </div>
+
+            </li>
+        }
     </ul>
+    @section scripts {
+        <script>
+            $(document).ready(function () {
+                $(".js-tongle-attendance").click(function (e) {
+                    var button = $(e.target);
+                    $.post("/api/attendances", { Id: button.attr("data-course-id") })
+                        .done(function () {
+                            alert("Dang ky khoa hoc thanh cong!!!!");
+                            button
+                                .removeClass("btn-default")
+                                .addClass("btn-info")
+                                .text("Going");
+                        }).fail(function () {
+                            alert("Loi");
+                        });
+                });
+
+            });
+        </script>    }
 </div>

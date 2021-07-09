@@ -13,7 +13,7 @@ namespace lab04.Controllers
     {
         public ActionResult Index()
         {
-            BigschoolContext context = new BigschoolContext();
+            BigSchoolDBContext context = new BigSchoolDBContext();
             var upcommingCourse = context.Course.Where(p => p.Datetime > DateTime.Now).OrderBy(p => p.Datetime).ToList();
             foreach (Course i in upcommingCourse)
             {
