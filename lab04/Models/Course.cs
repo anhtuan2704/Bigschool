@@ -38,5 +38,6 @@ namespace lab04.Models
         public List<Category> ListCategory = new List<Category>();
         public String Name;
         public string LectureName;
+       
     }
 }

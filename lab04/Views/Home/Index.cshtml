@@ -3,8 +3,10 @@
     ViewBag.Title = "Home Page";
 }
 <link href="~/Content/Site.css" rel="stylesheet" />
-<a href="@Url.Action("Create","course")">Create</a>
+
+
 <div class="row">
+    <a href="@Url.Action("Create","course")">Create</a>
     <ul class="course">
         @foreach (var course in Model)
         {
