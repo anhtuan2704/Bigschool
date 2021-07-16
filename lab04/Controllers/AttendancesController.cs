@@ -15,16 +15,23 @@ namespace lab04.Controllers
         public IHttpActionResult Attend(Course attendanceDto)
         {
             var userID = User.Identity.GetUserId();
-            BigSchoolDBContext context = new BigSchoolDBContext();
-            if (context.Attendee.Any(p => p.Attendee1 == userID && p.CourseID == attendanceDto.id))
+            BigschoolDBContext context = new BigschoolDBContext();
+            if (context.Attendee.Any(p => p.Attendee1 == userID && p.CourseID ==
+            attendanceDto.id))
+
+                if (context.Attendee.Any(p => p.Attendee1 == userID && p.CourseID == attendanceDto.id))
             {
-                return BadRequest("The attendance already exists!");
+                context.Attendee.Remove(context.Attendee.SingleOrDefault(p =>
+ p.Attendee1 == userID && p.CourseID == attendanceDto.id));
+                context.SaveChanges();
+                return Ok("cancel");
             }
             var Attendee = new Attendee()
             {
                 CourseID = attendanceDto.id,
                 Attendee1 = User.Identity.GetUserId()
             };
+
             context.Attendee.Add(Attendee);
             context.SaveChanges();
             return Ok();

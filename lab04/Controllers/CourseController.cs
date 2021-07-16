@@ -16,7 +16,7 @@ namespace lab04.Controllers
         // GET: Course
         public ActionResult Create()
         {
-            BigSchoolDBContext context = new BigSchoolDBContext();
+            BigschoolDBContext context = new BigschoolDBContext();
             Course objCourse = new Course();
             objCourse.ListCategory = context.Category.ToList();
             return View(objCourse);
@@ -26,7 +26,7 @@ namespace lab04.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Course objcourse)
         {
-            BigSchoolDBContext context = new BigSchoolDBContext();
+            BigschoolDBContext context = new BigschoolDBContext();
 
             ModelState.Remove("LectureID");
             if (!ModelState.IsValid)
@@ -47,7 +47,7 @@ namespace lab04.Controllers
         }
         public ActionResult Attending()
         {
-            BigSchoolDBContext context = new BigSchoolDBContext();
+            BigschoolDBContext context = new BigschoolDBContext();
             ApplicationUser currenUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
             var listAttendance = context.Attendee.Where(p => p.Attendee1 == currenUser.Id).ToList();
             var courses = new List<Course>();
@@ -63,7 +63,7 @@ namespace lab04.Controllers
         public ActionResult Mine()
         {
             ApplicationUser currenUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
-            BigSchoolDBContext context = new BigSchoolDBContext();
+            BigschoolDBContext context = new BigschoolDBContext();
             var courses = context.Course.Where(c => c.LectureID == currenUser.Id && c.Datetime > DateTime.Now).ToList();
             foreach (Course i in courses)
             {
@@ -71,63 +71,11 @@ namespace lab04.Controllers
             }
             return View(courses);
         }
-        //[HttpGet]
-        //  public ActionResult Edit(int id) 
-        //  {
-        //      BigSchoolDBContext context = new BigSchoolDBContext();
-        //      Course courses = context.Course.SingleOrDefault(p => p.id == id);
-        //      Course objCourse = new Course();
-        //      objCourse.ListCategory = context.Category.ToList();
-        //      if (courses == null)
-        //      {
-        //          return HttpNotFound();
-
-        //      }
-        //      return View(objCourse);
-        //  }
-        //  [Authorize]
-        //  [HttpPost]
-        //  public ActionResult Edit(Course course)
-        //  {
-        //      BigSchoolDBContext context = new BigSchoolDBContext();
-        //      Course courseUpdate = context.Course.SingleOrDefault(p => p.id == course.id);
-
-        //      if (courseUpdate != null)
-        //      {
-        //          context.Course.AddOrUpdate(course);
-        //          context.SaveChanges();
-        //      }
-        //      return RedirectToAction("Mine");
-        //  }
-        //  public ActionResult Delete(int id)
-        //  {
-        //      BigSchoolDBContext context = new BigSchoolDBContext();
-        //      Course courses = context.Course.SingleOrDefault(p => p.id == id);
-        //      if (courses == null)
-        //      {
-        //          return HttpNotFound();
-        //      }
-        //      return View(courses);
-        //  }
-        //  [Authorize]
-        //  [HttpPost]
-
-        //  public ActionResult DeleteBook(int id)
-        //  {
-        //      BigSchoolDBContext context = new BigSchoolDBContext();
-        //      Course courses = context.Course.SingleOrDefault(p => p.id == id);
-        //      if (courses != null)
-        //      {
-        //          context.Course.Remove(courses);
-        //          context.SaveChanges();
-
-        //      }
-        //      return RedirectToAction("Mine");
-        //  }
+        
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            BigSchoolDBContext context = new BigSchoolDBContext();
+            BigschoolDBContext context = new BigschoolDBContext();
             Course c = context.Course.SingleOrDefault(p => p.id == id);
             c.ListCategory = context.Category.ToList();
             return View(c);
@@ -136,12 +84,7 @@ namespace lab04.Controllers
         [HttpPost]
         public ActionResult Edit(Course c)
         {
-           
-            try
-
-            {
-
-                BigSchoolDBContext context = new BigSchoolDBContext();
+            BigschoolDBContext context = new BigschoolDBContext();
                 Course edit = context.Course.SingleOrDefault(p => p.id == c.id);
 
                 if (edit != null)
@@ -152,70 +95,21 @@ namespace lab04.Controllers
                 }
                 return RedirectToAction("Mine");
 
-            }
-
-            catch (DbEntityValidationException ex)
-
-            {
-
-                // Retrieve the error messages as a list of strings.
-
-                var errorMessages = ex.EntityValidationErrors
-
-                .SelectMany(x => x.ValidationErrors)
-
-                .Select(x => x.ErrorMessage);
-
-                // Join the list to a single string.
-
-                var fullErrorMessage = string.Join("; ", errorMessages);
-
-                // Combine the original exception message with the new one.
-
-                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
-
-                // Throw a new DbEntityValidationException with the improved exception message.
-
-                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
-
-            }
         }
-        //[Authorize]
-        //public ActionResult Delete(int id)
-        //{
-        //    BigSchoolDBContext context = new BigSchoolDBContext();
-        //    Course delete = context.Course.SingleOrDefault(p => p.id == id);
-        //    return View(delete);
-        //}
-        //[HttpPost]
-        //public ActionResult DeleteCourse(int id)
-        //{
-        //    BigSchoolDBContext context = new BigSchoolDBContext();
-        //    Course delete = context.Course.SingleOrDefault(p => p.id == id);
-
-        //    if (delete != null)
-        //    {
-        //        context.Course.Remove(delete);
-        //        context.SaveChanges();
-
-        //    }
-        //    return RedirectToAction("Mine");
-        //}
+       
         [Authorize]
         public ActionResult Delete(int id)
         {
-            BigSchoolDBContext context = new BigSchoolDBContext();
+            BigschoolDBContext context = new BigschoolDBContext();
             Course delete = context.Course.SingleOrDefault(p => p.id == id);
             return View(delete);
         }
         [HttpPost]
         public ActionResult DeleteCourse(int id)
         {
-           
-            try
 
-            {
-                BigSchoolDBContext context = new BigSchoolDBContext();
+
+            BigschoolDBContext context = new BigschoolDBContext();
                 Course delete = context.Course.SingleOrDefault(p => p.id == id);
                 if (delete != null)
                 {
@@ -223,39 +117,40 @@ namespace lab04.Controllers
                     context.SaveChanges();
 
                 }
-              
-
-
-            }
-
-            catch (DbEntityValidationException ex)
-
-            {
-
-                // Retrieve the error messages as a list of strings.
-
-                var errorMessages = ex.EntityValidationErrors
-
-                .SelectMany(x => x.ValidationErrors)
-
-                .Select(x => x.ErrorMessage);
-
-                // Join the list to a single string.
-
-                var fullErrorMessage = string.Join("; ", errorMessages);
-
-                // Combine the original exception message with the new one.
-
-                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
-
-                // Throw a new DbEntityValidationException with the improved exception message.
-
-                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
-
-            }
             return RedirectToAction("Mine");
         }
-          
+        public ActionResult LectureiamGoing()
+        {
+            ApplicationUser currentUser = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            BigschoolDBContext context = new BigschoolDBContext();
+            //danh sách giảng viên được theo dõi bởi người dùng (đăng nhập) hiện tại
+            var listFollwee = context.Following.Where(p => p.FllowerID ==
+
+            currentUser.Id).ToList();
+
+            //danh sách các khóa học mà người dùng đã đăng ký
+            var listAttendances = context.Attendee.Where(p => p.Attendee1 ==
+
+            currentUser.Id).ToList();
+
+            var courses = new List<Course>();
+            foreach (var course in listAttendances)
+
+            {
+                foreach (var item in listFollwee)
+                {
+                    if (item.FlloweeID == course.Course.LectureID)
+                    {
+                        Course objCourse = course.Course;
+                        objCourse.LectureName =
+                        System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>()
+                        .FindById(objCourse.LectureID).Name;
+                        courses.Add(objCourse);
+                    }
+                }
+            }
+            return View(courses);
+        }  
     }
 
 }

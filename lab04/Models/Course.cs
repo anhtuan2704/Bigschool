@@ -23,8 +23,6 @@ namespace lab04.Models
 
         [Required]
         [StringLength(255)]
-      
-
         public string Place { get; set; }
 
         public DateTime Datetime { get; set; }
@@ -38,6 +36,9 @@ namespace lab04.Models
         public List<Category> ListCategory = new List<Category>();
         public String Name;
         public string LectureName;
-       
+
+        public bool isLogin = false;
+        public bool isShowGoing = false;
+        public bool isShowFollow = false;
     }
 }

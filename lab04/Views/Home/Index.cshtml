@@ -3,7 +3,11 @@
     ViewBag.Title = "Home Page";
 }
 <link href="~/Content/Site.css" rel="stylesheet" />
-
+<div class="jumbotron">
+    <h1>Anh Tuan No1</h1>
+    <p class="lead"></p>
+    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
 
 <div class="row">
     <a href="@Url.Action("Create","course")">Create</a>
@@ -22,33 +26,102 @@
                 <div class="details">
                     <span class="lecture">
                         @course.Name
+                        @if (course.isLogin)
+                        {
+                            if (course.isShowFollow)
+                            {
+                                <button data-user-id="@course.LectureID" class="btn btn-warning btn-sm js-tongle-follow">Follow</button>
+                            }
+                            else
+                            {
+                                <button data-user-id="@course.LectureID" class="btn btn-warning btn-sm js-tongle-follow">Following</button>
+                            }
+                        }
+
+
                     </span>
+                    <br />
                     <span class="category">
                         @course.Category.Name
+                        @if (course.isLogin)
+                        {
+                            if (course.isShowGoing)
+                            {
+                                <button data-course-id="@course.id" class="btn btn-info btn-sm js-tongle-attendance">Going?</button>
+                            }
+                            else
+                            {
+                                <button data-course-id="@course.id" class="btn btn-info btn-sm js-tongle-attendance">Going</button>
+                            }
+                        }
+
                     </span>
-                    <button data-course-id="@course.id" class="btn btn-default btn-sm js-tongle-attendance">Going?</button>
+
                 </div>
 
             </li>
         }
     </ul>
-    @section scripts {
+    @section scripts{
         <script>
             $(document).ready(function () {
                 $(".js-tongle-attendance").click(function (e) {
                     var button = $(e.target);
                     $.post("/api/attendances", { Id: button.attr("data-course-id") })
-                        .done(function () {
-                            alert("Dang ky khoa hoc thanh cong!!!!");
-                            button
-                                .removeClass("btn-default")
-                                .addClass("btn-info")
-                                .text("Going");
+                        .done(function (result) {
+                            if (result) {
+                                alert("Hủy thành công")
+                                button
+                                    .removeClass("btn-info")
+                                    .addClass("btn-default")
+                                    .text("Going?");
+                            }
+                            else {
+
+
+                                alert("Đăng kí khóa hoc thành công")
+                                button
+                                    .removeClass("btn-default")
+                                    .addClass("btn-info")
+                                    .text("Going");
+                            }
                         }).fail(function () {
-                            alert("Loi");
+                            alert("Có gì đó sai sai");
                         });
                 });
+                $(".js-tongle-follow").click(function (e) {
+                    var button = $(e.target);
+                    var followee = button.attr("data-user-id");
+                    $.post("/api/following", { FlloweeID: button.attr("data-user-id") })
+                        .done(function (resutl) {
+                            if (resutl == "cancel") {
+                                $('.js-tongle-follow').each(function (i, obj) {
+                                    if ($(this).attr('data-user-id') == followee) {
+                                        $(this).removeClass("btn-warning")
+                                            .addClass("btn-default")
+                                            .text("Follow");
+                                    }
+                                });
+                                alert("Hủy theo dõi thành công")
+                            }
+                            else {
+                                $('.js-tongle-follow').each(function (i, obj) {
+                                    if ($(this).attr('data-user-id') == followee) {
+                                        $(this).removeClass("btn-default")
+                                            .addClass("btn-warning")
+                                            .text("Following");
+                                    }
+                                });
+                                alert("Theo dõi thành công")
+                            }
+                            
+                        }).fail(function () {
+                            alert("Có gì đó sai sai");
+                        });
 
+                });
             });
-        </script>    }
+        </script>
+    }
 </div>
+ 
